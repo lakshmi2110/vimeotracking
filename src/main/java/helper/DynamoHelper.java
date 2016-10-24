@@ -25,7 +25,7 @@ public class DynamoHelper {
 		Table table = dynamoDB.getTable(dynamoDBTable);
 
 		try {
-			logger.info("Adding data to " + dynamoDBTable);
+			logger.debug("Adding data to " + dynamoDBTable);
 
 			Item item = new Item()
 					.withPrimaryKey("title", schema.getTitle())

@@ -20,7 +20,7 @@ public class Singleton {
 
 	public synchronized void writeToFile(Path filePath, String str) {
 		try {
-			logger.info("Writing to file {}, values {}" , filePath.getFileName(), str);
+			logger.debug("Writing to file {}, values {}" , filePath.getFileName(), str);
 			Files.write(filePath, str.getBytes(), StandardOpenOption.APPEND);
 		} catch (IOException e) {
 			logger.error("Error while writing to file" + filePath.getFileName(), e.getMessage());
