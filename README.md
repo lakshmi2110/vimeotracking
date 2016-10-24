@@ -3,7 +3,7 @@
 Pre requisites:
 1. Set up AWS access key and secret key in vimeo.properties under src/main/resources
 
-The main method is called Worker.java under src/main/java/init
+The main method is called Main.java under src/main/java/init
 
 This project uses gradle for dependency management.
 
