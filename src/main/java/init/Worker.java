@@ -64,14 +64,12 @@ public class Worker implements Callable<Worker> {
 			}
 		}
 
-		//		Query the MySQL database for the list of movies (endpoint details below)
+		//Query the MySQL database for the list of movies (endpoint details below)
 		List<MovieSearch> movieList = dao.getMovieList();
 		Date start = new Date();  
 		ExecutorService executorService = Executors.newFixedThreadPool(10);
 
-		for (int i = 0; i < 5; i++) {
-
-//		for (int i = 0; i < movieList.size(); i++) {
+		for (int i = 0; i < movieList.size(); i++) {
 			String movieTitle = movieList.get(i).getMovieTitle();
 			String searchTerm = movieList.get(i).getMovieSearchTerm();
 			searchTerm = searchTerm.replaceAll(" ", "%20");
