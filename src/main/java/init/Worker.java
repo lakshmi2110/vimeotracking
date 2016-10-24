@@ -51,8 +51,9 @@ public class Worker implements Runnable {
 		MovieDaoImpl dao = new MovieDaoImpl();
 
 		List<Worker> workers = new ArrayList<Worker>();
-
-		Path filePath = Paths.get(new SimpleDateFormat("yyyyMMddhhmm'.txt'").format(new Date()));
+		//The filename is mm-hh-dd-MM-yyyy and not the other way for better performance during retrieval. 
+		//Prefixes are not repeated this way
+		Path filePath = Paths.get(new SimpleDateFormat("mm-hh-dd-MM-yyyy'.txt'").format(new Date()));
 		if (!Files.exists(filePath)) {
 			try {
 				Files.createFile(filePath);

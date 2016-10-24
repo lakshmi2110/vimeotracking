@@ -10,8 +10,8 @@ import com.amazonaws.services.s3.model.PutObjectResult;
 
 public class S3Helper {
  
-    //TODO
-    private String folderName = "";
+    //TODO this can be stored in folders named by date/month/year for easier retrieval
+    private String folderName = "vimeotracking";
 
     public PutObjectResult uploadObject(Path filePath, PropertiesProvider propertiesProvider) throws InterruptedException {
         //The AWS credentials MUST NOT be hardcoded here. They should ideally be part of an IAM role and retrieved at run time
