@@ -2,14 +2,14 @@ apply plugin: 'java'
 apply plugin: 'eclipse'
 apply plugin: 'application'
 
-mainClassName = 'client.Worker'
+mainClassName = 'init.Worker'
 
 repositories {
     mavenCentral()
 }
 
 jar {
-    baseName = 'parrot-vimeo'
+    baseName = 'vimeotracking'
     version =  '0.1.0'
 }
 
