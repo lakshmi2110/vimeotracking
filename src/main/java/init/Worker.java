@@ -12,6 +12,9 @@ import java.util.Date;
 import java.util.List;
 import java.util.Properties;
 import java.util.TimeZone;
+import java.util.concurrent.Callable;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -24,11 +27,10 @@ import helper.PropertiesProvider;
 import helper.S3Helper;
 import vimeo.VimeoSearch;
 
-public class Worker implements Runnable {
+public class Worker implements Callable<Worker> {
 
 	private static final Logger logger = LoggerFactory.getLogger(Worker.class);
 
-	public boolean running = false;
 	private String movieTitle;
 	private String searchTerm;
 	private Path filePath;
@@ -42,8 +44,8 @@ public class Worker implements Runnable {
 		this.movieTitle = movieTitle;
 		this.searchTerm = searchTerm;
 		this.filePath = filePath;
-		Thread thread = new Thread(this);  
-		thread.start();  
+//		Thread thread = new Thread(this);  
+//		thread.start();  
 	}
 
 	public static void main(String[] args) throws InterruptedException {
@@ -65,8 +67,11 @@ public class Worker implements Runnable {
 		//		Query the MySQL database for the list of movies (endpoint details below)
 		List<MovieSearch> movieList = dao.getMovieList();
 		Date start = new Date();  
+		ExecutorService executorService = Executors.newFixedThreadPool(10);
 
-		for (int i = 0; i < movieList.size(); i++) {
+		for (int i = 0; i < 5; i++) {
+
+//		for (int i = 0; i < movieList.size(); i++) {
 			String movieTitle = movieList.get(i).getMovieTitle();
 			String searchTerm = movieList.get(i).getMovieSearchTerm();
 			searchTerm = searchTerm.replaceAll(" ", "%20");
@@ -75,11 +80,10 @@ public class Worker implements Runnable {
 
 		logger.info("Workers size - "+workers.size());
 		for (Worker worker : workers) {
-			while (worker.running) {
-				Thread.sleep(1);
-			}
+			executorService.submit(worker);
 		}
 
+		executorService.shutdown();
 		//Upload file to S3
 		logger.info("Starting upload of file {} to S3", filePath.getFileName());
 		S3Helper s3Helper = new S3Helper();
@@ -94,8 +98,7 @@ public class Worker implements Runnable {
 
 
 	@Override
-	public void run() {
-		this.running = true;
+	public Worker call() throws Exception {
 		logger.info(
 				"This is currently running on a separate thread, " + "the id is: " + Thread.currentThread().getId());
 		VimeoSearch vimeoSearch = new VimeoSearch();
@@ -129,14 +132,8 @@ public class Worker implements Runnable {
 		schema.setType("views");
 
 		dHelper.loadDataIntoTable(schema, propertiesProvider);
+		return null;
 
-		try {
-			Thread.sleep(5);
-		} catch (InterruptedException e) {
-			Thread.currentThread().interrupt();  
-
-		}  
-		this.running = false;
 	}
 
 
@@ -174,4 +171,6 @@ public class Worker implements Runnable {
 		return propertiesProvider;
 
 	}
+
+	
 }
