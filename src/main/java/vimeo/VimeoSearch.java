@@ -14,6 +14,8 @@ public class VimeoSearch {
     private static final Logger logger = LoggerFactory.getLogger(VimeoSearch.class);
 
 	public int getResponse(String searchParam, String page, Path filePath) {
+		//TODO this is the token for an app created on my account. Have left this value hardcoded for now.
+		//Ideally should generate this token using the endpoint vimeo provides.
 		Vimeo vimeo = new Vimeo("829e9488d8d8af48c4a57068b4fd405d"); 
 		int totalViews = 0;
 
